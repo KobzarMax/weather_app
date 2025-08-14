@@ -35,7 +35,7 @@ export default async function LocationDetails({
   const forecast: OpenWeatherForecast = await forecastRes.json();
   const gradient = getWeatherGradient(current.weather[0].description);
 
-  const chartData = forecast.list.slice(0, 12).map((item) => ({
+  const chartData = forecast.list.slice(0, 24).map((item) => ({
     time: formatLocalTime(item.dt, forecast.city.timezone),
     temp: Math.round(item.main.temp),
     feels_like: Math.round(item.main.feels_like),
@@ -45,7 +45,7 @@ export default async function LocationDetails({
   }));
 
   return (
-    <div className="container text-white space-y-6">
+    <div className="container text-white space-y-6 mx-auto">
       {/* Current Weather */}
       <div className="flex items-center gap-4">
         <Image
@@ -69,7 +69,7 @@ export default async function LocationDetails({
       </div>
 
       {/* Weather Details */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm rounded-2xl shadow-2xl bg-white/20 p-5">
         <div>Humidity: {current.main.humidity}%</div>
         <div>Pressure: {current.main.pressure} hPa</div>
         <div>Clouds: {current.clouds.all}%</div>
@@ -104,13 +104,15 @@ export default async function LocationDetails({
       </div>
 
       {/* Forecast */}
-      <div className={`p-6 rounded shadow bg-gradient-to-br ${gradient}`}>
+      <div
+        className={`p-6 rounded-2xl shadow bg-gradient-to-br ${gradient} animate-gradient`}
+      >
         <h2 className="text-lg font-semibold mb-2">Next Hours Forecast</h2>
         <div className="overflow-x-auto flex gap-4 text-xs">
-          {forecast.list.slice(0, 12).map((item) => (
+          {forecast.list.slice(0, 24).map((item) => (
             <div
               key={item.dt}
-              className="flex flex-col items-center bg-white/20 p-2 rounded"
+              className="flex flex-col min-w-24 items-center bg-white/20 p-2 rounded-2xl"
             >
               <p>{formatLocalTime(item.dt, forecast.city.timezone)}</p>
               <Image

@@ -8,6 +8,7 @@ import {
   formatLocalTime,
   getWeatherGradient,
 } from "@/utils";
+import Link from "next/link";
 
 interface LocationCardProps {
   location: Favourite;
@@ -43,7 +44,7 @@ export default async function LocationCard({ location }: LocationCardProps) {
 
   return (
     <div
-      className={`p-4 border rounded shadow bg-gradient-to-br ${gradient} text-white relative`}
+      className={`p-4 border rounded-2xl shadow bg-gradient-to-br ${gradient} animate-gradient text-white relative`}
     >
       <div className="absolute top-2 right-2">
         <ThreeDotsMenu location={location} />
@@ -77,9 +78,21 @@ export default async function LocationCard({ location }: LocationCardProps) {
       <div className="mt-1 text-xs">
         🕒 Local time: {formatLocalTime(current.dt, current.timezone)}
       </div>
-      <div className="text-xs opacity-80">
-        Last updated: {new Date(current.dt * 1000).toLocaleTimeString()}
+      <div className="flex items-center justify-between gap-2">
+        <div className="text-xs opacity-80">
+          Last updated: {new Date(current.dt * 1000).toLocaleTimeString()}
+        </div>
+        <Link
+          href={`/${location.id}`}
+          className="font-semibold text-sm text-green-400 hover:underline"
+        >
+          View forecast
+        </Link>
       </div>
+      <Link
+        className="absolute inset-0 pointer-events-auto"
+        href={`/${location.id}`}
+      />
     </div>
   );
 }

@@ -35,12 +35,21 @@ export default function WeatherChart({
   unit = "",
 }: WeatherChartProps) {
   return (
-    <div className="bg-white/60 p-4 rounded">
-      <ResponsiveContainer width="100%" height={250}>
+    <div className="bg-white/60 p-4 rounded-2xl">
+      <ResponsiveContainer
+        style={{ marginLeft: "-30px", marginBottom: "-16px" }}
+        width="100%"
+        height={280}
+      >
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#ffffff50" />
-          <XAxis dataKey="time" stroke="#000" />
-          <YAxis stroke="#000" />
+          <XAxis
+            tickMargin={5}
+            dataKey="time"
+            stroke="#000"
+            orientation="bottom"
+          />
+          <YAxis tickMargin={5} stroke="#000" orientation="left" />
           <Tooltip
             formatter={(value: number) => `${value} ${unit}`}
             contentStyle={{ backgroundColor: "#1f2937", border: "none" }}

@@ -41,7 +41,7 @@ export function formatLocalTime(unix: number, offsetSec: number) {
 const weatherGradients: Record<string, string> = {
   cloud: "from-gray-300 to-gray-500",
   rain: "from-blue-400 to-blue-700",
-  clear: "from-yellow-300 to-orange-500",
+  clear: "from-blue-300 to-blue-100",
   snow: "from-blue-200 to-white",
 };
 

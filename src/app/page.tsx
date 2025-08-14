@@ -12,11 +12,13 @@ export default async function Home() {
   const favourites: Favourite[] = await res.json();
 
   return (
-    <main className="container px-5 py-20 mx-auto">
-      <div className="flex items-center justify-between mb-8">
-        <div className="space-y-2">
-          <h1 className="text-2xl font-semibold">My Favorite Locations</h1>
-          <p className="text-gray-600 text-sm">
+    <main className="container animated-bg px-5 py-8 md:py-12 lg:py-16 mx-auto">
+      <div className="flex flex-col items-start space-y-2 lg:space-y-0 md:flex-row md:items-center justify-between mb-8">
+        <div>
+          <h1 className="text-2xl lg:text-[2.5rem] font-semibold">
+            My Favorite Locations
+          </h1>
+          <p className="text-gray-600 text-base font-semibold font-poppins">
             Monitor wind conditions at your favorite locations
           </p>
         </div>

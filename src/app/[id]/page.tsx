@@ -24,7 +24,6 @@ export default async function LocationPage({
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">{location.name}</h1>
       <LocationDetails location={location} />
     </div>
   );
