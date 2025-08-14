@@ -19,7 +19,7 @@ interface ChartData {
   wind: number;
 }
 
-interface WeatherChartProps {
+export interface WeatherChartProps {
   data: ChartData[];
   dataKey: keyof ChartData;
   name: string;

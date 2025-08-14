@@ -2,7 +2,7 @@
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
-import { Favourite } from "@/types/favourite";
+import { type Favourite } from "@/types/favourite";
 import { useDeleteFavouriteDialog } from "@/store/useDeleteFavouriteDialog";
 import Link from "next/link";
 

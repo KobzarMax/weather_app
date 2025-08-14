@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect, useCallback } from "react";
 import {
   Dialog,
   DialogPanel,
@@ -47,16 +47,11 @@ export const AddFavoriteDialog = () => {
 
   const nameValue = watch("name");
 
-  useEffect(() => {
-    if (!nameValue || nameValue.length < 2) {
-      setSearchResults([]);
-      return;
-    }
-
-    const handler = debounce(async () => {
+  const debouncedSearch = useCallback(
+    debounce(async (query: string) => {
       try {
         const res = await fetch(
-          `/api/geocode?query=${encodeURIComponent(nameValue)}`
+          `/api/geocode?query=${encodeURIComponent(query)}`
         );
         if (res.ok) {
           const data: GeoLocation[] = await res.json();
@@ -65,13 +60,22 @@ export const AddFavoriteDialog = () => {
       } catch (err) {
         console.error("Search failed", err);
       }
-    }, 500);
+    }, 500),
+    []
+  );
 
-    handler();
+  useEffect(() => {
+    if (!nameValue || nameValue.length < 2) {
+      setSearchResults([]);
+      return;
+    }
 
-    // Cleanup debounce on unmount or name change
-    return () => handler.cancel();
-  }, [nameValue]);
+    debouncedSearch(nameValue);
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [nameValue, debouncedSearch]);
 
   const onSubmit = async (values: FavouriteFormValues) => {
     setLoading(true);
@@ -122,6 +126,7 @@ export const AddFavoriteDialog = () => {
                   <button
                     onClick={close}
                     className="text-gray-400 hover:text-gray-600"
+                    aria-label="Close"
                   >
                     <XMarkIcon className="h-5 w-5" />
                   </button>
@@ -141,27 +146,31 @@ export const AddFavoriteDialog = () => {
                       </p>
                     )}
                   </div>
-
                   {searchResults.length > 0 && (
-                    <ul className="border rounded max-h-40 overflow-y-auto">
-                      {searchResults.map((loc, idx) => (
-                        <li
-                          key={idx}
-                          className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => {
-                            setValue("name", `${loc.name}, ${loc.country}`);
-                            setValue("lat", Number(loc.lat.toFixed(7)));
-                            setValue("lon", Number(loc.lon.toFixed(7)));
-                            setSearchResults([]);
-                          }}
-                        >
-                          {loc.name}, {loc.state ? loc.state + ", " : ""}
-                          {loc.country}
+                    <ul
+                      role="listbox"
+                      id="search-results"
+                      className="border rounded max-h-40 overflow-y-auto"
+                    >
+                      {searchResults.map((loc, i) => (
+                        <li key={i} role="option">
+                          <button
+                            type="button"
+                            className="w-full text-left px-3 py-2 hover:bg-gray-100"
+                            onClick={() => {
+                              setValue("name", `${loc.name}, ${loc.country}`);
+                              setValue("lat", Number(loc.lat.toFixed(7)));
+                              setValue("lon", Number(loc.lon.toFixed(7)));
+                              setSearchResults([]);
+                            }}
+                          >
+                            {loc.name}, {loc.state ? loc.state + ", " : ""}
+                            {loc.country}
+                          </button>
                         </li>
                       ))}
                     </ul>
                   )}
-
                   <div>
                     <input
                       type="number"
